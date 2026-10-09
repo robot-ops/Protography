@@ -124,7 +124,7 @@ section, footer {
 }
 
 .hero-title {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin-bottom: 1rem;
 }
 
@@ -241,4 +241,23 @@ section, footer {
     font-size: 0.9rem;
 }
 
+/* Responsive */
+@media (max-width: 640px) {
+    .hero-title {
+        font-size: 2rem;
+    }
 
+    .hero-action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .footer-wrapper {
+        flex-direction: column;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
