@@ -1,6 +1,15 @@
 @import "tailwindcss";
 
 @theme {
+  --color-primary: #2b5b84;
+  --color-muted: #666666;
+  --color-border-ui: #dcdcdc;
+  --color-page: #f4f7f6;
+  --color-card: #ffffff;
+  --color-text-main: #222222;
+}
+
+:root {
   --bg-color: #f4f7f6;
   --card-color: #ffffff;
   --text-color: #222222;
@@ -15,4 +24,8 @@ html {
   color: var(--text-color);
   background-color: var(--bg-color);
   line-height: 1.6;
+}
+
+section, footer {
+  scroll-margin-top: 70px;
 }
