@@ -1,4 +1,30 @@
+import { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+
 export function Footer() {
+  const { user } = useAuth();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Auto-fill Name and Email from authenticated user
+  useEffect(() => {
+    if (user) {
+      setName(user.name || '');
+      setEmail(user.email || '');
+    }
+  }, [user]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+    setMessage('');
+    setTimeout(() => {
+      setIsSubmitted(false);
+    }, 4000);
+  };
+
   return (
     <footer id="contact" className="bg-card border-t border-border-ui pt-12 sm:pt-16 pb-8 mt-12 sm:mt-20">
       <div className="max-w-[1100px] mx-auto px-4 sm:px-6">
@@ -18,10 +44,19 @@ export function Footer() {
             <h3 className="text-lg sm:text-xl font-bold mb-4">
               Contact <span className="text-primary">Me</span>
             </h3>
-            <form className="flex flex-col gap-3" action="#" method="post">
+
+            {isSubmitted && (
+              <div className="mb-3 p-2.5 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded">
+                Message sent successfully!
+              </div>
+            )}
+
+            <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
               <input
                 type="text"
                 name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 placeholder="Your Name"
                 required
                 className="w-full p-2.5 border border-border-ui rounded text-sm bg-white"
@@ -29,12 +64,16 @@ export function Footer() {
               <input
                 type="email"
                 name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your Email"
                 required
                 className="w-full p-2.5 border border-border-ui rounded text-sm bg-white"
               />
               <textarea
                 name="message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
                 placeholder="Your Message"
                 required
                 className="w-full p-2.5 border border-border-ui rounded text-sm min-h-[80px] bg-white resize-y"
