@@ -36,25 +36,25 @@ function authenticateToken(req, res, next) {
   const token = authHeader && authHeader.split(' ')[1]; // Format: "Bearer <token>"
 
   if (!token) {
-    return res.status(401).json({ error: 'Access denied: No token provided' });
+    return res.status(401).json({ error: 'Access denied: Please sign in to view portfolio' });
   }
 
   jwt.verify(token, JWT_SECRET, (err, decodedUser) => {
     if (err) {
-      return res.status(403).json({ error: 'Invalid or expired token' });
+      return res.status(403).json({ error: 'Invalid or expired session. Please sign in again' });
     }
     req.user = decodedUser;
     next();
   });
 }
 
-// 1. Healthcheck Route
+// 1. Healthcheck Route (Public)
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Protography backend is running smoothly' });
 });
 
-// 2. Portfolio Route: Fetch portfolio items from PostgreSQL
-app.get('/api/portfolio', async (req, res) => {
+// 2. Portfolio Route: Protected - Requires Valid User Login
+app.get('/api/portfolio', authenticateToken, async (req, res) => {
   try {
     const result = await query('SELECT id, image, alt, category FROM portfolios ORDER BY id ASC');
     res.json(result.rows);
