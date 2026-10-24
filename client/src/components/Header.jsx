@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
     <header className="sticky top-0 bg-white/95 backdrop-blur-xs border-b border-border-ui z-50">
@@ -12,31 +14,49 @@ export function Header() {
             Proto<span className="text-primary">graphy</span>
           </a>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden sm:block">
-            <ul className="flex gap-6 text-sm font-medium">
-              <li>
-                <a href="#home" className="text-primary font-bold">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="#about" className="text-muted hover:text-primary transition-colors">
-                  About
-                </a>
-              </li>
-              <li>
-                <a href="#portfolio" className="text-muted hover:text-primary transition-colors">
-                  Portfolio
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="text-muted hover:text-primary transition-colors">
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </nav>
+          {/* Desktop Navigation & User Profile */}
+          <div className="hidden sm:flex items-center gap-6">
+            <nav>
+              <ul className="flex gap-6 text-sm font-medium">
+                <li>
+                  <a href="#home" className="text-primary font-bold">
+                    Home
+                  </a>
+                </li>
+                <li>
+                  <a href="#about" className="text-muted hover:text-primary transition-colors">
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a href="#portfolio" className="text-muted hover:text-primary transition-colors">
+                    Portfolio
+                  </a>
+                </li>
+                <li>
+                  <a href="#contact" className="text-muted hover:text-primary transition-colors">
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </nav>
+
+            {/* User Profile & Sign Out */}
+            {user && (
+              <div className="flex items-center gap-3 pl-4 border-l border-border-ui text-sm">
+                <span className="text-xs font-medium text-text-main">
+                  Hi, <span className="font-semibold">{user.name.split(' ')[0]}</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-md transition"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
+          </div>
 
           {/* Mobile Hamburger Button */}
           <button
@@ -95,6 +115,25 @@ export function Header() {
                   Contact
                 </a>
               </li>
+
+              {/* Mobile User Profile & Sign Out */}
+              {user && (
+                <li className="pt-2 border-t border-border-ui flex items-center justify-between py-1">
+                  <span className="text-xs font-medium text-text-main">
+                    Signed in as <span className="font-semibold">{user.name}</span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      logout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="px-3 py-1 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-md"
+                  >
+                    Sign Out
+                  </button>
+                </li>
+              )}
             </ul>
           </nav>
         )}
