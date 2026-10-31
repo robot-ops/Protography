@@ -5,9 +5,19 @@ import { Hero } from './components/Hero';
 import { About } from './components/About';
 import { Portfolio } from './components/Portfolio';
 import { Footer } from './components/Footer';
+import { SuccessPage } from './components/SuccessPage';
 
 function AppContent() {
   const { user, isLoading } = useAuth();
+
+  // Check if current URL is the Stripe Checkout Success page
+  const isSuccessRoute =
+    window.location.pathname.startsWith('/success') ||
+    window.location.search.includes('order_id');
+
+  if (isSuccessRoute) {
+    return <SuccessPage />;
+  }
 
   // 1. Show loading spinner while checking existing session
   if (isLoading) {
