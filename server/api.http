@@ -1,0 +1,33 @@
+@baseUrl = http://localhost:5000
+
+### 1. Healthcheck (Public - Check if Stripe is configured)
+GET {{baseUrl}}/api/health
+
+### 2. Login (Demo User)
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "demo@protography.com",
+  "password": "password123"
+}
+
+### 3. Fetch Portfolios with Prices (Protected)
+@authToken = {{login.response.body.token}}
+GET {{baseUrl}}/api/portfolio
+Authorization: Bearer {{authToken}}
+
+### 4. Create Stripe Checkout Session (Protected - Real Price from DB)
+# @name checkout
+POST {{baseUrl}}/api/checkout
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "portfolioId": 1
+}
+
+### 5. Order Lookup Endpoint (Check order payment status)
+GET {{baseUrl}}/api/orders/1
+Authorization: Bearer {{authToken}}
